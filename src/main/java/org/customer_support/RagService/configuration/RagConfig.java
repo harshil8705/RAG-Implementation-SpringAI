@@ -1,5 +1,6 @@
 package org.customer_support.RagService.configuration;
 
+import org.customer_support.RagService.VectorStoreInitializer;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.embedding.EmbeddingModel;
