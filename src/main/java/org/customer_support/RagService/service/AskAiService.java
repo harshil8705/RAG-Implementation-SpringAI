@@ -23,17 +23,13 @@ public class AskAiService {
 
         PromptTemplate customPromptTemplate = PromptTemplate.builder()
                 .template("""
-            Answer the question below using only the provided context.
-
-            Question: <query>
-
-            Context:
-            <question_answer_context>
-
-            Rules:
-            1. If the answer is not in the context, say "I don't know."
-            2. Do not mention the context in your answer.
-            """).build();
+      Answer the query strictly referring the provided context:
+      {context}
+      Query:
+      {query}
+      In case you don't have any answer from the context provided, just say:
+      I'm sorry I don't have the information you are looking for.
+    """).build();
 
         QuestionAnswerAdvisor qaAdvisor = QuestionAnswerAdvisor.builder(vectorStore)
                 .promptTemplate(customPromptTemplate)
