@@ -52,7 +52,6 @@
 			<scope>test</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-vector-store-chroma</artifactId>

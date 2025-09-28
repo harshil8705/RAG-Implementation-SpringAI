@@ -3,8 +3,6 @@ package org.customer_support.RagService.service;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.template.st.StTemplateRenderer;
-import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
@@ -23,25 +21,22 @@ public class AskAiService {
 
         PromptTemplate customPromptTemplate = PromptTemplate.builder()
                 .template("""
-      Answer the query strictly referring the provided context:
-      {context}
-      Query:
-      {query}
-      In case you don't have any answer from the context provided, just say:
-      I'm sorry I don't have the information you are looking for.
-    """).build();
+                Answer the query strictly referring to the provided context:
+                
+                Context:
+                {context}
+                
+                Query:
+                {query}
+                
+                Rules:
+                1. If the answer is not in the context, just say you don't know.
+                2. Avoid statements like "Based on the context..." or "The provided information...".
+                """).build();
 
-        QuestionAnswerAdvisor qaAdvisor = QuestionAnswerAdvisor.builder(vectorStore)
-                .promptTemplate(customPromptTemplate)
-                .searchRequest(SearchRequest.builder()
-                        .similarityThreshold(0.6d)
-                        .topK(3)
-                        .build()
-                )
-                .build();
-
-        return chatClient.prompt(userQuery)
-                .advisors(qaAdvisor)
+        return chatClient.prompt()
+                .user(userQuery)
+                .advisors(new QuestionAnswerAdvisor(vectorStore))
                 .call()
                 .content();
 
